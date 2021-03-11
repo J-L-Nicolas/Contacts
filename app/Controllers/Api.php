@@ -49,7 +49,6 @@ class Api extends BaseController
             $listeContact = $this->contactsModel->orderBy('last_Name', 'ASC')->orderBy('first_Name', 'ASC')->paginate(12);
         }
 
-
         return $this->response->setJSON($listeContact);
 	}
 
@@ -57,8 +56,6 @@ class Api extends BaseController
     *   function edite
     **************************************** */
     public function edit(){
-
-        
 
         $rules = [
             'id'      => 'required',
@@ -97,7 +94,7 @@ class Api extends BaseController
         }else{
 
             $tabError = $this->errorMessage($rules);
-            return $this->response->setJSON($tabError);
+            return $this->response->setJSON([$tabError]);
         }
 
 		return $this->response->setJSON(['response' => false]);
@@ -154,9 +151,7 @@ class Api extends BaseController
 
         if ( !empty( $this->request->getVar('id') ) ){
 
-            $etat = $this->contactsModel
-                ->where('id', $this->request->getVar('id'))
-                ->first()['favory'];
+            $etat = $this->contactsModel->where('id', $this->request->getVar('id'))->first()['favory'];
 
             $dataFavoty = 'No';
 
@@ -164,10 +159,7 @@ class Api extends BaseController
                 $dataFavoty = 'Yes';
             }
 
-            if ($this->contactsModel
-                ->where('id', $this->request->getVar('id'))
-                ->set(['favory' => $dataFavoty])
-                ->update()){
+            if ($this->contactsModel->where('id', $this->request->getVar('id'))->set(['favory' => $dataFavoty])->update()){
 
                 return $this->response->setJSON(['response' => true]);
 
@@ -178,8 +170,5 @@ class Api extends BaseController
         return $this->response->setJSON(['response' => false]);
 		
 	}
-
-
-
 
 }
