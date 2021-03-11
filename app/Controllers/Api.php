@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ContactsModel;
+use CodeIgniter\I18n\Time;
 
 class Api extends BaseController
 {
@@ -53,30 +54,88 @@ class Api extends BaseController
 	}
 
     /* ************************************
+    *   function create new contact
+    **************************************** */
+    public function create(){
+        $rules = [
+            'first_Name'    => 'required|min_length[3]|max_length[200]',
+            'last_Name'     => 'required|min_length[3]|max_length[200]',
+            'company'       => 'required|min_length[3]|max_length[200]',
+            'job'           => 'required|min_length[3]|max_length[200]',
+            'email'         => 'required|min_length[6]|max_length[50]|is_unique[contacts.email]|valid_email',
+            'phone'         => 'required|min_length[10]|max_length[15]'
+        ];
+
+        if($this->validate($rules)){
+
+            $note = '';
+            if (!empty($this->request->getVar('note'))){
+                $note = $this->request->getVar('note');
+            }
+
+            $data = [
+                'first_Name'        => $this->request->getVar('first_Name'),
+                'last_Name'         => $this->request->getVar('last_Name'),
+                'company'           => $this->request->getVar('company'),
+                'job'               => $this->request->getVar('job'),
+                'email'             => $this->request->getVar('email'),
+                'phone'             => $this->request->getVar('phone'),
+                'note'              => $note,
+                'favory'            => 'No',
+                'image'             => '',
+                'createDate'        => Time::now(),
+            ];
+
+            if ($this->contactsModel->save($data)){
+
+                return $this->response->setJSON(['response' => true]);
+
+            }
+
+            return $this->response->setJSON(['response' => false]);
+
+        }else{
+
+            $tabError = $this->errorMessage($rules);
+            return $this->response->setJSON([$tabError]);
+        }
+
+		return $this->response->setJSON(['response' => false]);
+
+    }
+
+
+    /* ************************************
     *   function edite
     **************************************** */
     public function edit(){
 
         $rules = [
-            'id'      => 'required',
-            'first_Name'      => 'required|min_length[3]|max_length[200]',
-            'last_Name'      => 'required|min_length[3]|max_length[200]',
-            'company'      => 'required|min_length[3]|max_length[200]',
-            'job'      => 'required|min_length[3]|max_length[200]',
-            'email'         => 'required|min_length[6]|max_length[50]|valid_email',
-            'phone'      => 'required|min_length[10]|max_length[15]'
+            'id'            => 'required',
+            'first_Name'    => 'required|min_length[3]|max_length[200]',
+            'last_Name'     => 'required|min_length[3]|max_length[200]',
+            'company'       => 'required|min_length[3]|max_length[200]',
+            'job'           => 'required|min_length[3]|max_length[200]',
+            'email'         => 'required|min_length[6]|max_length[50]|is_unique[contacts.email]|valid_email',
+            'phone'         => 'required|min_length[10]|max_length[15]'
         ];
 
         if($this->validate($rules)){
 
+            $note = '';
+            if (!empty($this->request->getVar('note'))){
+                $note = $this->request->getVar('note');
+            }
+
             $id = $this->request->getVar('id');
             $data = [
-                'first_Name'      => $this->request->getVar('first_Name'),
-                'last_Name'      => $this->request->getVar('last_Name'),
-                'company'      => $this->request->getVar('company'),
-                'job'      => $this->request->getVar('job'),
+                'first_Name'    => $this->request->getVar('first_Name'),
+                'last_Name'     => $this->request->getVar('last_Name'),
+                'company'       => $this->request->getVar('company'),
+                'job'           => $this->request->getVar('job'),
                 'email'         => $this->request->getVar('email'),
-                'phone'      => $this->request->getVar('phone')
+                'phone'         => $this->request->getVar('phone'),
+                'note'          => $note,
             ];
 
             if ($this->contactsModel
@@ -115,7 +174,7 @@ class Api extends BaseController
 
                 if ($validation->getError($key) != ''){
 
-                    $tabError[$key] = [ $key => $validation->getError($key) ];
+                    $tabError[$key] = $validation->getError($key) ;
 
                 }
 
