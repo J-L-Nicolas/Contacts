@@ -116,7 +116,7 @@ class Api extends BaseController
             'last_Name'     => 'required|min_length[3]|max_length[200]',
             'company'       => 'required|min_length[3]|max_length[200]',
             'job'           => 'required|min_length[3]|max_length[200]',
-            'email'         => 'required|min_length[6]|max_length[50]|is_unique[contacts.email]|valid_email',
+            'email'         => 'required|min_length[6]|max_length[50]|valid_email',
             'phone'         => 'required|min_length[10]|max_length[15]'
         ];
 
