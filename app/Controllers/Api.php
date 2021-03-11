@@ -59,8 +59,75 @@ class Api extends BaseController
     public function edit(){
 
         
-		
+
+        $rules = [
+            'id'      => 'required',
+            'first_Name'      => 'required|min_length[3]|max_length[200]',
+            'last_Name'      => 'required|min_length[3]|max_length[200]',
+            'company'      => 'required|min_length[3]|max_length[200]',
+            'job'      => 'required|min_length[3]|max_length[200]',
+            'email'         => 'required|min_length[6]|max_length[50]|valid_email',
+            'phone'      => 'required|min_length[10]|max_length[15]'
+        ];
+
+        if($this->validate($rules)){
+
+            $id = $this->request->getVar('id');
+            $data = [
+                'first_Name'      => $this->request->getVar('first_Name'),
+                'last_Name'      => $this->request->getVar('last_Name'),
+                'company'      => $this->request->getVar('company'),
+                'job'      => $this->request->getVar('job'),
+                'email'         => $this->request->getVar('email'),
+                'phone'      => $this->request->getVar('phone')
+            ];
+
+            if ($this->contactsModel
+                ->where('id', $id)
+                ->set($data)
+                ->update())
+                {
+
+                    return $this->response->setJSON(['response' => true]);
+
+                }
+
+                return $this->response->setJSON(['response' => false]);
+
+        }else{
+
+            $tabError = $this->errorMessage($rules);
+            return $this->response->setJSON($tabError);
+        }
+
+		return $this->response->setJSON(['response' => false]);
+
 	}
+
+    /* ************************************
+    * function manage data error
+    *************************************** */
+    private function errorMessage($rules){
+        $validation = $this->validator;
+
+        if ( isset( $validation ) ) {
+
+            $tabError = [];
+
+            foreach($rules as $key => $itms){
+
+                if ($validation->getError($key) != ''){
+
+                    $tabError[$key] = [ $key => $validation->getError($key) ];
+
+                }
+
+            }
+
+            return  $tabError;
+
+        }
+    }
 
     /* ************************************
     *   function delete by id
