@@ -6,7 +6,7 @@
 - it's functions we need to enter in 'Post' method
 - return response Json
 - the API allows create contact, edit contact, read contact, update contact, delete contact
--- --
+----
 
 -  ` ** ** Create Contact ** **`:
     * use function create 
@@ -23,7 +23,7 @@
     * if the required variables are incorrectly filled, an error table with the field name in key and an adapted error message in value is returned. 
     * if the required variables are correctly filled, return response => true.
     * if problem in the operation return response => false.
---
+---
 - ** `Edit Contact`:
 
     use function edite
