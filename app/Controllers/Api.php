@@ -17,6 +17,7 @@ class Api extends BaseController
 		$this->contactsModel = new ContactsModel();
 	
 	}
+    
 
     /* ************************************
     *   function list and search
@@ -70,6 +71,7 @@ class Api extends BaseController
         }
         return $this->response->setJSON(['response' => false]);
 	}
+
 
     /* ************************************
     *   function create new contact
@@ -212,6 +214,7 @@ class Api extends BaseController
 
 	}
 
+
     /* ************************************
     *   function manage from data error
     *   -- -- -- -- -- -- - -- -- -- 
@@ -241,6 +244,7 @@ class Api extends BaseController
         }
     }
 
+
     /* ************************************
     *   function delete contact by id
     *   -- -- -- -- -- -- -- --
@@ -262,6 +266,7 @@ class Api extends BaseController
 
         return $this->response->setJSON(['response' => false]);
 	}
+
 
     /* ************************************
     *   function favorite switch between 'yes' or 'No' By id
