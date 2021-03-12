@@ -3,21 +3,24 @@
 namespace App\Controllers;
 
 use App\Models\ContactsModel;
+use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 
 class Api extends BaseController
 {
 
 	public $contactsModel= null;
+	public $usersModel= null;
 
 
 	public function __construct(){
 
 		parent::__construct();
 		$this->contactsModel = new ContactsModel();
+		$this->usersModel = new UsersModel();
 	
 	}
-    
+
 
     /* ************************************
     *   function list and search
@@ -31,7 +34,6 @@ class Api extends BaseController
     *   * if no result return response => false.
     **************************************** */
 	public function index(){
-
         $paginate = 10;
         if (!empty($this->request->getVar('paginate'))){
             $paginate = $this->request->getVar('paginate');
@@ -239,7 +241,7 @@ class Api extends BaseController
 
             }
 
-            return  $tabError;
+            return $tabError;
 
         }
     }
@@ -299,5 +301,126 @@ class Api extends BaseController
         return $this->response->setJSON(['response' => false]);
 		
 	}
+
+    ##############################################################################
+    #   USER Register and Login
+    ##############################################################################
+    
+    /* ************************************
+    *   function create new User
+    *   -- -- -- -- -- -- -- -- -- --
+    *   * url [ ~/api/register ].
+    *   * based on the Post method six variables
+    *       
+    *       ////////////////////////// (string)'pseudo'     required 
+    *       ////////////////////////// (string)'password'   required 
+    *       ////////////////////////// (string)'first_Name' required 
+    *       ////////////////////////// (string)'last_Name'  required
+    *       ////////////////////////// (string)'email'      required
+    *       ////////////////////////// (int)'phone'         required
+
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned. 
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
+    * ****************************************/
+    public function register(){
+        $response['response'] = false;
+        $rules = [
+
+            'pseudo'        => 'required|min_length[3]|max_length[200]|is_unique[users.pseudo]',
+            'first_Name'    => 'required|min_length[3]|max_length[200]',
+            'last_Name'     => 'required|min_length[3]|max_length[200]',
+            'email'         => 'required|min_length[6]|max_length[50]|is_unique[contacts.email]|valid_email',
+            'phone'         => 'required|min_length[10]|max_length[15]',
+            'password'      => 'required|min_length[3]|max_length[200]',
+            'confpassword'  => 'matches[password]',
+        ];
+
+        if($this->validate($rules)){
+
+            $data = [
+                'first_Name'        => $this->request->getVar('first_Name'),
+                'last_Name'         => $this->request->getVar('last_Name'),
+                'company'           => '',
+                'job'               => '',
+                'email'             => $this->request->getVar('email'),
+                'phone'             => $this->request->getVar('phone'),
+                'note'              => '',
+                'favory'            => 'No',
+                'image'             => '',
+                'createDate'        => Time::now(),
+            ];
+
+            if ($this->contactsModel->save($data)){
+
+                $lastIdContact = $this->contactsModel->insertID();
+
+                $data = [
+                    'id_contact'    => $lastIdContact,
+                    'pseudo'        => $this->request->getVar('pseudo'),
+                    'password'      => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+                ];
+
+                if ($this->usersModel->save($data)){
+
+                    $response['response'] = true;
+                }
+        
+            }
+
+        }else{
+
+            $tabError = $this->errorMessage($rules);
+            $response['tabError'] = $tabError;
+
+        }
+
+		return $this->response->setJSON($response);
+
+    }
+
+
+    /* ************************************
+    *   function Login User
+    *   -- -- -- -- -- -- -- -- -- --
+    *   * url [ ~/api/login ].
+    *   * based on the Post method two variables
+    *       
+    *       ////////////////////////// (string)'pseudo'     required 
+    *       ////////////////////////// (string)'password'   required 
+
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned. 
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
+    * ****************************************/
+    public function login(){
+        $response['response'] = false;
+        $rules = [
+
+            'pseudo'        => 'required|min_length[3]|max_length[200]',
+            'password'      => 'required|min_length[3]|max_length[200]',
+        ];
+
+        if($this->validate($rules)){
+            $data = [
+                'pseudo'        => $this->request->getVar('pseudo'),
+                'password'      => $this->request->getVar('password'),
+            ];
+        }else{
+            $tabError = $this->errorMessage($rules);
+            $response['tabError'] = $tabError;
+        }
+
+        return $this->response->setJSON($response);
+
+    }
 
 }
