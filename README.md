@@ -1,56 +1,110 @@
-# CodeIgniter 4 Framework
+# Contact Project
+##
+#################################################################
+##   -- Contact management api for multiple devices --          #
+     /~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\   #
+################################### Author:     Jeremy LEMONY   #
+################################### Update:     12/03/2021      #
+################################### Create API: 11/03/2021      #
+#################################################################
+      ___________________________________________________________________
+    /    _____________________________________________________________    \
+    |   |                                                             |   |
+    |   |  >_                                                         |   |
+    |   |                                                             |   |
+    |   |             /\            ______         ___________        |   |
+    |   |            /  \          |       \            |             |   |
+    |   |           /    \         |        |           |             |   |
+    |   |          /______\        |_______/            |             |   |
+    |   |         /        \       |                    |             |   |
+    |   |        /          \      |               ___________        |   |
+    |   |                                                             |   |
+    |   |                                                             |   |
+    |   |                                                             |   |
+    |   |                                                             |   |
+    |   |                      ______  ______  ______                 |   |
+    |   |                     |______||_____/ |      |                |   |
+    |   |                     |       |     \ |______|                |   |
+    |   |                                                             |   |
+    |   |_____________________________________________________________|   |
+     \___________________________________________________________________/
+                     \_______________________________________/
+                  .---------------------------------------------.
+               _-'.... .-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-. ....`-_
+            _-'..... .---.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.--.  .....`-_
+         _-'....... .---.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-`__`. .......`-_
+      _-'......... .-----.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-----. .........`-_
+   _-'........... .---.-. .-----------------------------. .-.---. ...........`-_
+  :-----------------------------------------------------------------------------:
+  `-----------------------------------------------------------------------------'
 
-## What is CodeIgniter?
-
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](http://codeigniter.com).
-
-This repository holds the distributable version of the framework,
-including the user guide. It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
-
-More information about the plans for version 4 can be found in [the announcement](http://forum.codeigniter.com/thread-62615.html) on the forums.
-
-The user guide corresponding to this version of the framework can be found
-[here](https://codeigniter4.github.io/userguide/).
+ --  --
+- this API has for objective to put a client through the different devices an access to functions 
+- it's functions we need to enter in 'Post' method
+- return response Json
+- the API allows create contact, edit contact, read contact, update contact, delete contact
 
 
-## Important Change with index.php
+- ** `Create Contact`:
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+    use function create
+    *   -- -- -- -- -- -- -- -- -- --
+    *   * url [ ~/api/create ].
+    *   * based on the Post method seven variables
+    *       ////////////////////////// (string)'first_Name' required 
+    *       ////////////////////////// (string)'last_Name'  required
+    *       ////////////////////////// (string)'company'    required
+    *       ////////////////////////// (string)'job'        required
+    *       ////////////////////////// (string)'email'      required
+    *       ////////////////////////// (int)'phone'         required
+    *       ////////////////////////// (string)'note'       optional
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned. 
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
 
-**Please** read the user guide for a better explanation of how CI4 works!
+- ** `Edit Contact`:
 
-## Repository Management
+    use function edite
+    *   -- -- -- -- -- --
+    *   * url [ ~/api/edit ].
+    *   * based on the Post method seven variables
+    *       ////////////////////////// (string)'first_Name' required 
+    *       ////////////////////////// (string)'last_Name'  required
+    *       ////////////////////////// (string)'company'    required
+    *       ////////////////////////// (string)'job'        required
+    *       ////////////////////////// (string)'email'      required
+    *       ////////////////////////// (int)'phone'         required
+    *       ////////////////////////// (string)'note'       optional
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned.
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
 
-We use Github issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+- ** `Read Contact`:
 
-## Contributing
+    Default url sends the complete list of contacts [ ~/api ].
+    *   * -- -- -- -- --
+    *   * via the Post method three variables (string)'type' and (string)'elements' and (int)'paginate' are available.
+    *   * variable 'type': it identifies the type of filter -> 'name' , 'company' , 'job' , 'email' , 'phone', 'id'.
+    *   * variable 'elements' it allows to search thanks to some characters in the selected type.
+    *   * variable 'paginate' is the number of items displayed per page, the variable has a default value of 10.
+    *   * this function returns an array in JSON format.
+    *   * if no result return response => false.
 
-We welcome contributions from the community.
 
-Please read the [*Contributing to CodeIgniter*](https://github.com/codeigniter4/CodeIgniter4/blob/develop/contributing.md) section in the development repository.
+- ** `Delete Contact`:
 
-## Server Requirements
-
-PHP version 7.3 or higher is required, with the following extensions installed:
-
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
-
-Additionally, make sure that the following extensions are enabled in your PHP:
-
-- json (enabled by default - don't turn it off)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php)
-- xml (enabled by default - don't turn it off)
+    use function delete
+    *   -- -- -- -- -- -- -- --
+    *   * url [ ~/api/delete ].
+    *   * based on the Post method the varible (int)'id'
+    *   * if problem in the operation return response => false.
