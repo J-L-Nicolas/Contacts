@@ -12,9 +12,9 @@
     * use function create 
     * url [ ~/api/create ].
     * based on the Post method seven variables
-        > // (string)'first_Name' required 
-        > // (string)'last_Name'  required
-        > // (string)'company'    required
+        > // (string)'first_Name' required   
+        > // (string)'last_Name'  required  
+        > // (string)'company'    required  
     *   * // (string)'job'        required
     *   * // (string)'email'      required
     *   * // (int)'phone'         required
