@@ -410,13 +410,17 @@ class Api extends BaseController
         ];
 
         if($this->validate($rules)){
+
             $data = [
                 'pseudo'        => $this->request->getVar('pseudo'),
                 'password'      => $this->request->getVar('password'),
             ];
+
         }else{
+
             $tabError = $this->errorMessage($rules);
             $response['tabError'] = $tabError;
+            
         }
 
         return $this->response->setJSON($response);
