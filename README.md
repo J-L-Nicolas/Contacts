@@ -14,20 +14,20 @@
 
 -  ` ** ** Create Contact ** **`:
     * use function create 
-    *   * url [ ~/api/create ].
-    *   * based on the Post method seven variables
-    *     // (string)'first_Name' required 
-    *     // (string)'last_Name'  required
-    *     // (string)'company'    required
-    *     // (string)'job'        required
-    *     // (string)'email'      required
-    *     // (int)'phone'         required
-    *     // (string)'note'       optional
-    *   * this function returns an array in JSON format.
-    *   * if the required variables are incorrectly filled, an error table with the field name in key and an adapted error message in value is returned. 
-    *   * if the required variables are correctly filled, return response => true.
-    *   * if problem in the operation return response => false.
-    *  -- -- -- -- -- -- -- -- -- --
+    * url [ ~/api/create ].
+    * based on the Post method seven variables
+    *   * // (string)'first_Name' required 
+    *   * // (string)'last_Name'  required
+    *   * // (string)'company'    required
+    *   * // (string)'job'        required
+    *   * // (string)'email'      required
+    *   * // (int)'phone'         required
+    *   * // (string)'note'       optional
+    * this function returns an array in JSON format.
+    * if the required variables are incorrectly filled, an error table with the field name in key and an adapted error message in value is returned. 
+    * if the required variables are correctly filled, return response => true.
+    * if problem in the operation return response => false.
+*  -- -- -- -- -- -- -- -- -- --
 
 - ** `Edit Contact`:
 
