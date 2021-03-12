@@ -2,10 +2,8 @@
 ##
 #################################################################
 ##   -- Contact management api for multiple devices --          #
-     /~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\   #
-################################### Author:     Jeremy LEMONY   #
-################################### Update:     12/03/2021      #
-################################### Create API: 11/03/2021      #
+
+
 
  --  --
 - this API has for objective to put a client through the different devices an access to functions 
@@ -15,9 +13,7 @@
 
 
 - ** `Create Contact`:
-
-    use function create
-    *   -- -- -- -- -- -- -- -- -- --
+    * use function create *  -- -- -- -- -- -- -- -- -- --
     *   * url [ ~/api/create ].
     *   * based on the Post method seven variables
     *       ////////////////////////// (string)'first_Name' required 
