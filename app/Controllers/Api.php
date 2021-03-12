@@ -19,9 +19,23 @@ class Api extends BaseController
 	}
 
     /* ************************************
-    *   function liste et recherche
+    *   function list and search
+    *   -- -- -- -- -- -- -- -- --
+    *   * default url sends the complete list of contacts [ ~/api ].
+    *   * via the Post method three variables (string)'type' and (string)'elements' and (int)'paginate' are available.
+    *   * variable 'type': it identifies the type of filter -> 'name' , 'company' , 'job' , 'email' , 'phone', 'id'.
+    *   * variable 'elements' it allows to search thanks to some characters in the selected type.
+    *   * variable 'paginate' is the number of items displayed per page, the variable has a default value of 10.
+    *   * this function returns an array in JSON format.
+    *   * if no result return response => false.
     **************************************** */
 	public function index(){
+
+        $paginate = 10;
+        if (!empty($this->request->getVar('paginate'))){
+            $paginate = $this->request->getVar('paginate');
+        }
+
         if (!empty($this->request->getVar('type')) && !empty($this->request->getVar('elements'))){
 
             switch($this->request->getVar('type')){
@@ -32,7 +46,7 @@ class Api extends BaseController
                     ->like('first_Name', $this->request->getVar('elements'),'both',null,true)
                     ->orlike('last_Name', $this->request->getVar('elements'),'both',null,true)
                     ->orderBy('id', 'DESC')
-                    ->paginate(12);
+                    ->paginate($paginate);
 
                     break;
 
@@ -47,14 +61,35 @@ class Api extends BaseController
 
         }else{
 
-            $listeContact = $this->contactsModel->orderBy('last_Name', 'ASC')->orderBy('first_Name', 'ASC')->paginate(12);
+            $listeContact = $this->contactsModel->orderBy('last_Name', 'ASC')->orderBy('first_Name', 'ASC')->paginate($paginate);
         }
 
-        return $this->response->setJSON($listeContact);
+        if (!empty($listeContact)){
+
+            return $this->response->setJSON($listeContact);
+        }
+        return $this->response->setJSON(['response' => false]);
 	}
 
     /* ************************************
     *   function create new contact
+    *   -- -- -- -- -- -- -- -- -- --
+    *   * url [ ~/api/create ].
+    *   * based on the Post method seven variables
+    *       ////////////////////////// (string)'first_Name' required 
+    *       ////////////////////////// (string)'last_Name'  required
+    *       ////////////////////////// (string)'company'    required
+    *       ////////////////////////// (string)'job'        required
+    *       ////////////////////////// (string)'email'      required
+    *       ////////////////////////// (int)'phone'         required
+    *       ////////////////////////// (string)'note'       optional
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned. 
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
     **************************************** */
     public function create(){
         $rules = [
@@ -106,7 +141,24 @@ class Api extends BaseController
 
 
     /* ************************************
-    *   function edite
+    *   function edite contact data
+    *   -- -- -- -- -- --
+    *   * url [ ~/api/edit ].
+    *   * based on the Post method seven variables
+    *       ////////////////////////// (string)'first_Name' required 
+    *       ////////////////////////// (string)'last_Name'  required
+    *       ////////////////////////// (string)'company'    required
+    *       ////////////////////////// (string)'job'        required
+    *       ////////////////////////// (string)'email'      required
+    *       ////////////////////////// (int)'phone'         required
+    *       ////////////////////////// (string)'note'       optional
+    *   * this function returns an array in JSON format.
+    *   * if the required variables are incorrectly filled,
+    *     an error table with the field name in key and an adapted
+    *     error message in value is returned.
+    *   * if the required variables are correctly filled,
+    *     return response => true.
+    *   * if problem in the operation return response => false.
     **************************************** */
     public function edit(){
 
@@ -161,7 +213,11 @@ class Api extends BaseController
 	}
 
     /* ************************************
-    * function manage data error
+    *   function manage from data error
+    *   -- -- -- -- -- -- - -- -- -- 
+    *   * private function which takes as parameter an array of rules
+    *   * return an array, with in key the name of the fields, 
+    *     in value a message adapted to the condition of the table rule.
     *************************************** */
     private function errorMessage($rules){
         $validation = $this->validator;
@@ -186,7 +242,11 @@ class Api extends BaseController
     }
 
     /* ************************************
-    *   function delete by id
+    *   function delete contact by id
+    *   -- -- -- -- -- -- -- --
+    *   * url [ ~/api/delete ].
+    *   * based on the Post method the varible (int)'id'
+    *   * if problem in the operation return response => false.
     **************************************** */
     public function delete(){
 
@@ -204,7 +264,12 @@ class Api extends BaseController
 	}
 
     /* ************************************
-    *   function  favorite yes or No By id
+    *   function favorite switch between 'yes' or 'No' By id
+    *   -- -- -- -- -- -- -- -- -- -- -- -- 
+    *   * url [ ~/api/favorite ].
+    *   * the favorite function allows to switch between the 'yes' and 'no' value of a contact
+    *   * based on the Post method the varible (int)'id'
+    *   * if problem in the operation return response => false.
     **************************************** */
     public function favorite(){
 
