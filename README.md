@@ -13,7 +13,7 @@
 
 
 - ** `Create Contact`:
-    * use function create *  -- -- -- -- -- -- -- -- -- --
+    * use function create 
     *   * url [ ~/api/create ].
     *   * based on the Post method seven variables
     *       ////////////////////////// (string)'first_Name' required 
@@ -30,7 +30,7 @@
     *   * if the required variables are correctly filled,
     *     return response => true.
     *   * if problem in the operation return response => false.
-
+    *  -- -- -- -- -- -- -- -- -- --
 
 - ** `Edit Contact`:
 
