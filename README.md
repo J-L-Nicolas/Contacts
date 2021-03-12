@@ -1,6 +1,6 @@
 # Contact Project
 
-##   -- Contact management api for multiple devices --          #
+## Contact management api for multiple devices 
 
 - this API has for objective to put a client through the different devices an access to functions 
 - it's functions we need to enter in 'Post' method
