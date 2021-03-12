@@ -1,16 +1,12 @@
 # Contact Project
-##
-#################################################################
+
 ##   -- Contact management api for multiple devices --          #
 
-
-
- --  --
 - this API has for objective to put a client through the different devices an access to functions 
 - it's functions we need to enter in 'Post' method
 - return response Json
 - the API allows create contact, edit contact, read contact, update contact, delete contact
-
+*  -- -- -- -- -- -- -- -- -- --
 
 -  ` ** ** Create Contact ** **`:
     * use function create 
