@@ -364,6 +364,15 @@ class Api extends BaseController
                 'pseudo'        => $this->request->getVar('pseudo'),
                 'password'      => $this->request->getVar('password'),
             ];
+
+            if ($query = $this->usersModel->where('pseudo', $data['pseudo'])->first()){
+
+                if (password_verify($data['password'],$query['password'])){
+
+                    $response['response'] = true;
+                    $response['id'] = $query['id'];
+                }
+            }
         }else{
 
             $response['Errors'] = $this->validator->getErrors();
