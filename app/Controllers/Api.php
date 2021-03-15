@@ -18,7 +18,6 @@ class Api extends BaseController
 		parent::__construct();
 		$this->contactsModel = new ContactsModel();
 		$this->usersModel = new UsersModel();
-	
 	}
 
 
@@ -34,6 +33,7 @@ class Api extends BaseController
     *   * if no result return response => false.
     **************************************** */
 	public function index(){
+        $response['response'] = false;
         $paginate = 10;
         if (!empty($this->request->getVar('paginate'))){
             $paginate = $this->request->getVar('paginate');
@@ -59,7 +59,6 @@ class Api extends BaseController
                         ->like( $this->request->getVar('type'), $this->request->getVar('elements') ,'both',null,true)
                         ->orderBy('id', 'DESC')
                         ->paginate(12);
-
             }
 
         }else{
@@ -68,10 +67,11 @@ class Api extends BaseController
         }
 
         if (!empty($listeContact)){
-
-            return $this->response->setJSON($listeContact);
+            $response['response'] = true;
+            $response['contacts'] = $listeContact;
         }
-        return $this->response->setJSON(['response' => false]);
+
+        return $this->response->setJSON($response);
 	}
 
 
@@ -96,6 +96,8 @@ class Api extends BaseController
     *   * if problem in the operation return response => false.
     **************************************** */
     public function create(){
+
+        $response['response'] = false;
         $rules = [
             'first_Name'    => 'required|min_length[3]|max_length[200]',
             'last_Name'     => 'required|min_length[3]|max_length[200]',
@@ -127,20 +129,15 @@ class Api extends BaseController
 
             if ($this->contactsModel->save($data)){
 
-                return $this->response->setJSON(['response' => true]);
-
+                $response['response'] = true;
             }
-
-            return $this->response->setJSON(['response' => false]);
 
         }else{
 
-            $tabError = $this->errorMessage($rules);
-            return $this->response->setJSON([$tabError]);
+            $response['errors'] = $this->validator->getErrors();
         }
 
-		return $this->response->setJSON(['response' => false]);
-
+		return $this->response->setJSON($response);
     }
 
 
@@ -166,6 +163,7 @@ class Api extends BaseController
     **************************************** */
     public function edit(){
 
+        $response['response'] = false;
         $rules = [
             'id'            => 'required',
             'first_Name'    => 'required|min_length[3]|max_length[200]',
@@ -200,51 +198,15 @@ class Api extends BaseController
                 ->update())
                 {
 
-                    return $this->response->setJSON(['response' => true]);
-
+                    $response['response'] = true;
                 }
-
-                return $this->response->setJSON(['response' => false]);
-
         }else{
-
-            $tabError = $this->errorMessage($rules);
-            return $this->response->setJSON([$tabError]);
+    
+            $response['errors'] =  $this->validator->getErrors();
         }
 
-		return $this->response->setJSON(['response' => false]);
-
+		return $this->response->setJSON($response);
 	}
-
-
-    /* ************************************
-    *   function manage from data error
-    *   -- -- -- -- -- -- - -- -- -- 
-    *   * private function which takes as parameter an array of rules
-    *   * return an array, with in key the name of the fields, 
-    *     in value a message adapted to the condition of the table rule.
-    *************************************** */
-    private function errorMessage($rules){
-        $validation = $this->validator;
-
-        if ( isset( $validation ) ) {
-
-            $tabError = [];
-
-            foreach($rules as $key => $itms){
-
-                if ($validation->getError($key) != ''){
-
-                    $tabError[$key] = $validation->getError($key) ;
-
-                }
-
-            }
-
-            return $tabError;
-
-        }
-    }
 
 
     /* ************************************
@@ -261,9 +223,7 @@ class Api extends BaseController
             if ($this->contactsModel->delete($this->request->getVar('id'))){
 
                 return $this->response->setJSON(['response' => true]);
-
             }
-
         }
 
         return $this->response->setJSON(['response' => false]);
@@ -286,20 +246,15 @@ class Api extends BaseController
 
             $dataFavoty = 'No';
 
-            if ($etat == "No"){
-                $dataFavoty = 'Yes';
-            }
+            $dataFavoty = ($etat == "No") ? 'Yes':'No';
 
             if ($this->contactsModel->where('id', $this->request->getVar('id'))->set(['favory' => $dataFavoty])->update()){
 
                 return $this->response->setJSON(['response' => true]);
-
             }
-
         }
 
         return $this->response->setJSON(['response' => false]);
-		
 	}
 
     ##############################################################################
@@ -330,7 +285,6 @@ class Api extends BaseController
     public function register(){
         $response['response'] = false;
         $rules = [
-
             'pseudo'        => 'required|min_length[3]|max_length[200]|is_unique[users.pseudo]',
             'first_Name'    => 'required|min_length[3]|max_length[200]',
             'last_Name'     => 'required|min_length[3]|max_length[200]',
@@ -369,18 +323,14 @@ class Api extends BaseController
 
                     $response['response'] = true;
                 }
-        
             }
 
         }else{
 
-            $tabError = $this->errorMessage($rules);
-            $response['tabError'] = $tabError;
-
+            $response['Errors'] = $this->validator->getErrors();
         }
 
 		return $this->response->setJSON($response);
-
     }
 
 
@@ -404,7 +354,6 @@ class Api extends BaseController
     public function login(){
         $response['response'] = false;
         $rules = [
-
             'pseudo'        => 'required|min_length[3]|max_length[200]',
             'password'      => 'required|min_length[3]|max_length[200]',
         ];
@@ -415,16 +364,12 @@ class Api extends BaseController
                 'pseudo'        => $this->request->getVar('pseudo'),
                 'password'      => $this->request->getVar('password'),
             ];
-
         }else{
 
-            $tabError = $this->errorMessage($rules);
-            $response['tabError'] = $tabError;
-            
+            $response['Errors'] = $this->validator->getErrors();
         }
 
         return $this->response->setJSON($response);
-
     }
 
 }
