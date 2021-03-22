@@ -21,7 +21,7 @@ class Home extends BaseController{
 		]);
 
 		$listeContact = json_decode($listeContact->getBody());
-
+	
 		$data = [
 			'page_title' => 'Contact',
 			'listeContact' => $listeContact,

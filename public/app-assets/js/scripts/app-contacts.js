@@ -77,10 +77,56 @@ $(document).ready(function () {
 
    // Favorite star click
    $(".app-page .favorite i").on("click", function (e) {
-      var idSelect = e.target.attributes[1].nodeValue;
-      console.log(idSelect);
+
       e.preventDefault();
+      let id_favori = e.target.id.split('-')[1];
+
+      /* change favory status */
+
+      $.ajax({
+         dataType: "json",
+         url:  'http://contacts/api/favorite',
+         type: 'POST',
+         data: {
+            id: id_favori,
+         },
+         success: function(res){
+
+            /* ---------- */
+
+            /* verifier stauts favory */
+            $.ajax({
+
+               dataType: "json",
+               url:  'http://contacts/api',
+               type: 'POST',
+               data: {
+                  type: 'id',
+                  elements: id_favori,
+               },
+               success: function(res){
+                  let res_contact = res.contacts[0]
+                  /* ------- */
+                  console.log(res_contact["favory"])
+
+               },
+               error: function(res){
+                  console.log(res);
+               },
+            })
+
+
+            /* ---------- */
+            
+         },
+         error: function(res){
+           
+         },
+      })
+
+
       $(this).toggleClass("amber-text");
+
    });
 
    // Toggle class of sidenav
@@ -140,18 +186,40 @@ $(document).ready(function () {
       contactComposeSidebar.removeClass("show");
    });
 
-   $(".dataTables_scrollBody tr").on("click", function () {
+   $(".dataTables_scrollBody tr").on("click", function (e) {
       updatecontact.removeClass("display-none");
       addcontact.addClass("display-none");
       contactOverlay.addClass("show");
       contactComposeSidebar.addClass("show");
-      $("#first_name").val("Paul");
-      $("#last_name").val("Rees");
-      $("#company").val("Acme Corporation");
-      $("#business").val("Software Developer");
-      $("#email").val("paul.rees@domain.com");
-      $("#phone").val("+1-202-555-0112");
-      $("#notes").val("Do not disturb during work."); 0.2
+      /* ------- */
+      let idSelect = e.currentTarget.attributes[1].nodeValue;
+
+      $.ajax({
+
+         dataType: "json",
+         url:  'http://contacts/api',
+         type: 'POST',
+         data: {
+            type: 'id',
+            elements: idSelect,
+         },
+         success: function(res){
+            let res_contact = res.contacts[0]
+            /* ------- */
+            $("#first_name").val(res_contact["first_Name"]);
+            $("#last_name").val(res_contact["last_Name"]);
+            $("#company").val(res_contact["company"]);
+            $("#business").val(res_contact["job"]);
+            $("#email").val(res_contact["email"]);
+            $("#phone").val(res_contact["phone"]);
+            $("#notes").val(res_contact["note"]); 0.2
+
+         },
+         error: function(res){
+            console.log(res);
+         },
+      })
+      
       labelEditForm.addClass("active");
    }).on("click", ".checkbox-label,.favorite,.delete", function (e) {
       e.stopPropagation();

@@ -125,7 +125,7 @@
           <tbody>
           <?php if ($listeContact->response){
             foreach($listeContact->contacts as $item){ ?>
-              <tr>
+              <tr class='cust-contact' id="<?php echo $item->id ?>">
                   <td class="center-align contact-checkbox">
                     <label class="checkbox-label">
                       <input type="checkbox" name="foo" />
@@ -137,7 +137,7 @@
                   <td><?php echo $item->first_Name . ' ' . $item->last_Name ?></td>
                   <td><?php echo $item->email ?></td>
                   <td><?php echo $item->phone ?></td>
-                  <td><span class="favorite" ><i class="<?php echo $item->favory == 'No'? 'material-icons' : 'material-icons amber-text' ?>" id="<?php echo $item->id ?>"> star_border </i></span></td>
+                  <td><span class="favorite" ><i id="f-<?php echo $item->id ?>" class="<?php echo  $item->favory == 'No'? 'material-icons' : 'material-icons amber-text' ?> f" > star_border </i></span></td>
                   <td><span><i class="material-icons delete">delete_outline</i></span></td>
                 </tr>
               <?php } 
