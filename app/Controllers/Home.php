@@ -2,24 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Models\ContactsModel;
-
-class Home extends BaseController
-{
-
-
-
+class Home extends BaseController{
 
 	public function __construct(){
 
 		parent::__construct();
 		$this->client = \Config\Services::curlrequest();
-	
 	}
 
-	public function index($searchType = null, $searchElement = null)
-	{
-		$client = \Config\Services::curlrequest();
+	public function index($searchType = null, $searchElement = null){
 
 		$listeContact = $this->client->request('POST', 'http://contacts/api', [
 			'form_params' => [
@@ -40,5 +31,4 @@ class Home extends BaseController
 		echo view('Home', $data);
 		echo view('common/FooterSite');
 	}
-
 }
