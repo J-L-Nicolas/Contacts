@@ -93,7 +93,7 @@ class Api extends BaseController
     *     error message in value is returned. 
     *   * if the required variables are correctly filled,
     *     return response => true.
-    *   * if problem in the operation return response => false.
+    *   * if problem in the operation or incorrectly filled return response => false.
     **************************************** */
     public function create(){
 
@@ -159,7 +159,7 @@ class Api extends BaseController
     *     error message in value is returned.
     *   * if the required variables are correctly filled,
     *     return response => true.
-    *   * if problem in the operation return response => false.
+    *   * if problem in the operation or incorrectly filled return response => false.
     **************************************** */
     public function edit(){
 
@@ -261,37 +261,41 @@ class Api extends BaseController
     #   USER Register and Login
     ##############################################################################
     
+
     /* ************************************
     *   function create new User
     *   -- -- -- -- -- -- -- -- -- --
     *   * url [ ~/api/register ].
-    *   * based on the Post method six variables
+    *   * this function allows to create a new user
+    *     it creates two tables 'users' and 'contact' linked with a 'id_contact'.
+    *   * based on the Post method seven variables
     *       
-    *       ////////////////////////// (string)'pseudo'     required 
-    *       ////////////////////////// (string)'password'   required 
-    *       ////////////////////////// (string)'first_Name' required 
-    *       ////////////////////////// (string)'last_Name'  required
-    *       ////////////////////////// (string)'email'      required
-    *       ////////////////////////// (int)'phone'         required
+    *       ////////////////////////// (string)'pseudo'         required 
+    *       ////////////////////////// (string)'password'       required 
+    *       ////////////////////////// (string)'confpassword'   required 
+    *       ////////////////////////// (string)'first_Name'     required 
+    *       ////////////////////////// (string)'last_Name'      required
+    *       ////////////////////////// (string)'email'          required
+    *       ////////////////////////// (int)'phone'             required
 
     *   * this function returns an array in JSON format.
     *   * if the required variables are incorrectly filled,
     *     an error table with the field name in key and an adapted
     *     error message in value is returned. 
     *   * if the required variables are correctly filled,
-    *     return response => true.
-    *   * if problem in the operation return response => false.
+    *     return response => true and id user.
+    *   * if problem in the operation or incorrectly filled return response => false.
     * ****************************************/
     public function register(){
         $response['response'] = false;
         $rules = [
             'pseudo'        => 'required|min_length[3]|max_length[200]|is_unique[users.pseudo]',
+            'password'      => 'required|min_length[3]|max_length[200]',
+            'confpassword'  => 'matches[password]',
             'first_Name'    => 'required|min_length[3]|max_length[200]',
             'last_Name'     => 'required|min_length[3]|max_length[200]',
             'email'         => 'required|min_length[6]|max_length[50]|is_unique[contacts.email]|valid_email',
             'phone'         => 'required|min_length[10]|max_length[15]',
-            'password'      => 'required|min_length[3]|max_length[200]',
-            'confpassword'  => 'matches[password]',
         ];
 
         if($this->validate($rules)){
@@ -321,7 +325,9 @@ class Api extends BaseController
 
                 if ($this->usersModel->save($data)){
 
+                    $lastIdContact = $this->usersModel->insertID();
                     $response['response'] = true;
+                    $response['id'] = $lastIdContact;
                 }
             }
 
@@ -348,10 +354,11 @@ class Api extends BaseController
     *     an error table with the field name in key and an adapted
     *     error message in value is returned. 
     *   * if the required variables are correctly filled,
-    *     return response => true.
+    *     return response => true and id user.
     *   * if problem in the operation return response => false.
     * ****************************************/
     public function login(){
+
         $response['response'] = false;
         $rules = [
             'pseudo'        => 'required|min_length[3]|max_length[200]',
@@ -381,4 +388,12 @@ class Api extends BaseController
         return $this->response->setJSON($response);
     }
 
+    ##############################################################################
+    #   
+    ##############################################################################
+    public function auth(){
+
+        
+
+    }
 }

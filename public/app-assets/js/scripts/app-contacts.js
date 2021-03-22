@@ -77,6 +77,8 @@ $(document).ready(function () {
 
    // Favorite star click
    $(".app-page .favorite i").on("click", function (e) {
+      var idSelect = e.target.attributes[1].nodeValue;
+      console.log(idSelect);
       e.preventDefault();
       $(this).toggleClass("amber-text");
    });

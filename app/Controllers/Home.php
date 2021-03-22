@@ -7,24 +7,33 @@ use App\Models\ContactsModel;
 class Home extends BaseController
 {
 
-	public $contactsModel= null;
+
 
 
 	public function __construct(){
 
 		parent::__construct();
-		$this->contactsModel = new ContactsModel();
+		$this->client = \Config\Services::curlrequest();
 	
 	}
 
 	public function index($searchType = null, $searchElement = null)
 	{
-		$listeContact = $this->contactsModel->orderBy('id', 'DESC')->paginate(12);
+		$client = \Config\Services::curlrequest();
+
+		$listeContact = $this->client->request('POST', 'http://contacts/api', [
+			'form_params' => [
+					'paginate' => 10,
+					'type' => '',
+					'elements' => '',
+			]
+		]);
+
+		$listeContact = json_decode($listeContact->getBody());
 
 		$data = [
 			'page_title' => 'Contact',
 			'listeContact' => $listeContact,
-			'pager' => $this->contactsModel->pager,
 		];
 
 		echo view('common/HeaderSite', $data);
