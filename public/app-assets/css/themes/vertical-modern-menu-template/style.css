@@ -2876,10 +2876,7 @@ select
 
 @media only screen and (min-width: 993px)
 {
-    #main
-    {
-        padding-left: 250px;
-    }
+   
     #main.main-full
     {
         padding-left: 64px;
@@ -9962,12 +9959,6 @@ nav.display-none.search-sm .nav-wrapper form .input-field i
 .border-bottom-1
 {
     border-bottom: 1px solid #f5f5f5;
-}
-
-#activity
-{
-    /* Timeline  */
-    /* -------- */
 }
 
 #activity .widget-timeline

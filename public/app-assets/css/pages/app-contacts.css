@@ -1,22 +1,6 @@
 /*----------------------------------------
   Contacts Page
 ------------------------------------------*/
-.content-area
-{
-    width: calc(100% - 280px);
-   
-}
-
-.content-area.content-left
-{
-    /* float: left; */
-}
-
-.content-area.content-right
-{
-    /* float: right; */
-}
-
 .content-area .app-wrapper .margin-top-contact
 {
     margin-top: -.35rem;
@@ -372,27 +356,14 @@
         color: #fff;
         background-color: #3f51b5 !important;
     }
-    .content-area .app-wrapper .dataTables_wrapper table.dataTable
-    {
-        /* height: calc(100vh - 530px); */
-    }
 }
 
-@media (max-width: 900px)
+@media (min-width: 900px)
 {
     
-    .content-area.content-right,
-    .content-area.content-left
-    {
-        z-index: 1;
-
-        float: none !important;
-
-        width: 100%;
-    }
-    .sidebar .sidebar-content .sidenav-trigger
-    {
-        top: 88px;
+    .content-area{
+        max-width: 1200px ;
+        margin: auto;
     }
 }
 
