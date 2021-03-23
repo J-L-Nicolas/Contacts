@@ -81,10 +81,11 @@ $(document).ready(function () {
       e.preventDefault();
       
       let id_favori = $(this).data('ref');
+      let i_this = $(this);
       /* change favory status */
 
       $.ajax({
-         dataType: "json",
+       
          url:  'http://contacts/api/favorite',
          type: 'POST',
          data: {
@@ -92,12 +93,9 @@ $(document).ready(function () {
          },
          success: function(res){
 
-            /* ---------- */
-
             /* verifier stauts favory */
             $.ajax({
 
-               dataType: "json",
                url:  'http://contacts/api',
                type: 'POST',
                data: {
@@ -105,29 +103,25 @@ $(document).ready(function () {
                   elements: id_favori,
                },
                success: function(res){
+                 
                   let res_contact = res.contacts[0]["favory"]
-                  /* ------- */
-                  
+
+                  i_this.removeClass("amber-text");
+
                   if (res_contact == 'Yes'){
-                     $(this).addClass("amber-text");
-                  }else{
-                     $(this).removeClass("amber-text");
+                     i_this.addClass("amber-text");
                   }
                },
                error: function(res){
                   console.log(res);
                },
             })
-            
+            /* ---------------------- */
          },
          error: function(res){
            
          },
       })
-
-
-      
-
    });
 
    // Toggle class of sidenav
@@ -224,8 +218,8 @@ $(document).ready(function () {
       contactOverlay.addClass("show");
       contactComposeSidebar.addClass("show");
       /* ------- */
-      let idSelect = e.currentTarget.attributes['data-idcontact'].nodeValue;
-
+      let idSelect = $(e.currentTarget).data('idcontact');
+      
       $.ajax({
 
          dataType: "json",
