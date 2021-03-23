@@ -79,8 +79,8 @@ $(document).ready(function () {
    $(".app-page .favorite i").on("click", function (e) {
 
       e.preventDefault();
-      let id_favori = e.target.id.split('-')[1];
-
+      
+      let id_favori = $(this).data('ref');
       /* change favory status */
 
       $.ajax({
@@ -105,18 +105,19 @@ $(document).ready(function () {
                   elements: id_favori,
                },
                success: function(res){
-                  let res_contact = res.contacts[0]
+                  let res_contact = res.contacts[0]["favory"]
                   /* ------- */
-                  console.log(res_contact["favory"])
-
+                  
+                  if (res_contact == 'Yes'){
+                     $(this).addClass("amber-text");
+                  }else{
+                     $(this).removeClass("amber-text");
+                  }
                },
                error: function(res){
                   console.log(res);
                },
             })
-
-
-            /* ---------- */
             
          },
          error: function(res){
@@ -125,7 +126,7 @@ $(document).ready(function () {
       })
 
 
-      $(this).toggleClass("amber-text");
+      
 
    });
 
@@ -182,8 +183,39 @@ $(document).ready(function () {
    $(
       ".contact-compose-sidebar .update-contact, .contact-compose-sidebar .close-icon, .contact-compose-sidebar .add-contact, .contact-overlay"
    ).on("click", function () {
+
+      /* update contact stauts favory */
+      $.ajax({
+
+         dataType: "json",
+         url:  'http://contacts/api/edit',
+         type: 'POST',
+         data: {
+            'id':          $("#idform").val(),
+            'first_Name':  $("#first_name").val(),
+            'last_Name':   $("#last_name").val(),
+            'company':     $("#company").val(),
+            'job':         $("#business").val(),
+            'email':       $("#email").val(),
+            'phone':       $("#phone").val(),
+            'note':        $("#notes").val(),
+         },
+         success: function(res){
+            if (res.response){
+               $('#name' + $("#idform").val()  ).html($("#first_name").val() + ' ' + $("#last_name").val());
+               $('#email' + $("#idform").val() ).html($("#email").val());
+               $('#phone' + $("#idform").val() ).html($("#phone").val());
+            }
+         },
+         error: function(res){
+            console.log(res);
+         },
+      })
+      /* ============ */
+
       contactOverlay.removeClass("show");
       contactComposeSidebar.removeClass("show");
+      
    });
 
    $(".dataTables_scrollBody tr").on("click", function (e) {
@@ -192,7 +224,7 @@ $(document).ready(function () {
       contactOverlay.addClass("show");
       contactComposeSidebar.addClass("show");
       /* ------- */
-      let idSelect = e.currentTarget.attributes[1].nodeValue;
+      let idSelect = e.currentTarget.attributes['data-idcontact'].nodeValue;
 
       $.ajax({
 
@@ -206,6 +238,7 @@ $(document).ready(function () {
          success: function(res){
             let res_contact = res.contacts[0]
             /* ------- */
+            $("#idform").val(res_contact["id"])
             $("#first_name").val(res_contact["first_Name"]);
             $("#last_name").val(res_contact["last_Name"]);
             $("#company").val(res_contact["company"]);
@@ -213,7 +246,6 @@ $(document).ready(function () {
             $("#email").val(res_contact["email"]);
             $("#phone").val(res_contact["phone"]);
             $("#notes").val(res_contact["note"]); 0.2
-
          },
          error: function(res){
             console.log(res);

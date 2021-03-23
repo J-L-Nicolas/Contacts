@@ -125,7 +125,8 @@
           <tbody>
           <?php if ($listeContact->response){
             foreach($listeContact->contacts as $item){ ?>
-              <tr class='cust-contact' id="<?php echo $item->id ?>">
+              <tr class='cust-contact' data-idContact="<?php echo $item->id ?>">
+
                   <td class="center-align contact-checkbox">
                     <label class="checkbox-label">
                       <input type="checkbox" name="foo" />
@@ -134,11 +135,12 @@
                   </td>
                   <td><span class="avatar-contact avatar-online"><img src="../../../app-assets/images/avatar/avatar-1.png"
                         alt="avatar"></span></td>
-                  <td><?php echo $item->first_Name . ' ' . $item->last_Name ?></td>
-                  <td><?php echo $item->email ?></td>
-                  <td><?php echo $item->phone ?></td>
-                  <td><span class="favorite" ><i id="f-<?php echo $item->id ?>" class="<?php echo  $item->favory == 'No'? 'material-icons' : 'material-icons amber-text' ?> f" > star_border </i></span></td>
+                  <td id="name<?php echo $item->id ?>"   ><?php echo $item->first_Name . ' ' . $item->last_Name ?></td>
+                  <td id="email<?php echo $item->id ?>"  ><?php echo $item->email ?></td>
+                  <td id="phone<?php echo $item->id ?>"  ><?php echo $item->phone ?></td>
+                  <td><span class="favorite" ><i data-ref="<?php echo $item->id ?>" class="<?php echo  $item->favory == 'No'? 'material-icons' : 'material-icons amber-text' ?> f" > star_border </i></span></td>
                   <td><span><i class="material-icons delete">delete_outline</i></span></td>
+
                 </tr>
               <?php } 
             }else{ ?>
@@ -171,42 +173,45 @@
         <div class="row">
           <div class="input-field col s12">
             <i class="material-icons prefix"> perm_identity </i>
-            <input id="first_name" type="text" class="validate">
+            <input id="first_name" type="text" class="validate" name="first_Name">
             <label for="first_name">First Name</label>
           </div>
           <div class="input-field col s12">
             <i class="material-icons prefix"> perm_identity </i>
-            <input id="last_name" type="text" class="validate">
+            <input id="last_name" type="text" class="validate" name="last_Name">
             <label for="last_name">Last Name</label>
           </div>
           <div class="input-field col s12">
             <i class="material-icons prefix"> business </i>
-            <input id="company" type="text" class="validate">
+            <input id="company" type="text" class="validate" name="company">
             <label for="company">Company</label>
           </div>
           <div class="input-field col s12">
             <i class="material-icons prefix"> business_center </i>
-            <input id="business" type="text" class="validate">
+            <input id="business" type="text" class="validate" name="job">
             <label for="business">Job Title</label>
           </div>
         </div>
         <div class="row">
           <div class="input-field col s12">
             <i class="material-icons prefix"> email </i>
-            <input id="email" type="email" class="validate">
+            <input id="email" type="email" class="validate" name="email">
             <label for="email">Email</label>
           </div>
           <div class="input-field col s12">
             <i class="material-icons prefix"> call </i>
-            <input id="phone" type="text" class="validate">
+            <input id="phone" type="text" class="validate" name="phone">
             <label for="phone">Phone</label>
           </div>
           <div class="input-field col s12">
             <i class="material-icons prefix"> note </i>
-            <input id="notes" type="text" class="validate">
+            <input id="notes" type="text" class="validate" name="note">
             <label for="notes">Notes</label>
           </div>
         </div>
+        <input id="idform" type="hidden" name="id">
+
+        <!--  -->
       </form>
       <div class="card-action pl-0 pr-0 right-align">
         <button class="btn-small waves-effect waves-light add-contact">
