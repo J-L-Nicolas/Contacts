@@ -76,53 +76,45 @@ $(document).ready(function () {
    }
 
    // Favorite star click
-   $(".app-page .favorite i").on("click", function (e) {
+   $(".favorite i").on("click", async function (e) {
 
       e.preventDefault();
-      
       let id_favori = $(this).data('ref');
       let i_this = $(this);
-      /* change favory status */
 
-      $.ajax({
-       
-         url:  'http://contacts/api/favorite',
-         type: 'POST',
-         data: {
-            id: id_favori,
-         },
-         success: function(res){
+      /* change favory status db */
+      let resultaAjax = await custAjax("http://contacts/api/favorite", {id: id_favori});
+      
 
-            /* verifier stauts favory */
-            $.ajax({
+      if (resultaAjax.response){
 
-               url:  'http://contacts/api',
-               type: 'POST',
-               data: {
-                  type: 'id',
-                  elements: id_favori,
-               },
-               success: function(res){
-                 
-                  let res_contact = res.contacts[0]["favory"]
+         let res_contact = await custAjax("http://contacts/api", {type: 'id', elements: id_favori})
 
-                  i_this.removeClass("amber-text");
+         if(res_contact.response){
 
-                  if (res_contact == 'Yes'){
-                     i_this.addClass("amber-text");
-                  }
-               },
-               error: function(res){
-                  console.log(res);
-               },
-            })
-            /* ---------------------- */
-         },
-         error: function(res){
-           
-         },
-      })
+            i_this.removeClass("amber-text");
+            console.log(res_contact);
+            if (res_contact.contacts[0]["favory"] == 'Yes'){
+               
+               i_this.addClass("amber-text");
+            }
+         }
+      }
+      
    });
+
+
+   // Delete star clik
+   $(".delete i").on("click", async function (e) {
+
+      e.preventDefault();
+      let id_delete = $(this).data('ref');
+      let message = confirm("Voulez-vous vraiment supprimer ce contact ?");
+      if (message){
+         let resultaAjax = await custAjax("http://contacts/api/delete", {id: id_delete});
+         $("#barre-" + $(this).data('ref')).remove();
+      }
+   })
 
    // Toggle class of sidenav
    $("#contact-sidenav").sidenav({
