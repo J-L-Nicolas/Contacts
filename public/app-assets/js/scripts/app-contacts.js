@@ -112,7 +112,7 @@ $(document).ready(function () {
       let message = confirm("Voulez-vous vraiment supprimer ce contact ?");
       if (message){
          let resultaAjax = await custAjax("http://contacts/api/delete", {id: id_delete});
-         $("#barre-" + $(this).data('ref')).remove();
+         reloadContacts();
       }
    })
 
@@ -168,61 +168,41 @@ $(document).ready(function () {
    })
    $(
       ".contact-compose-sidebar .update-contact, .contact-compose-sidebar .close-icon, .contact-compose-sidebar .add-contact, .contact-overlay"
-   ).on("click", function () {
+   ).on("click", async function () {
 
-      /* update contact stauts favory */
-      $.ajax({
+      let data = {
+         'id':          $("#idform").val(),
+         'first_Name':  $("#first_name").val(),
+         'last_Name':   $("#last_name").val(),
+         'company':     $("#company").val(),
+         'job':         $("#business").val(),
+         'email':       $("#email").val(),
+         'phone':       $("#phone").val(),
+         'note':        $("#notes").val(),
+      };
+        
+      let responce = await custAjax('http://contacts/api/edit', data);
+      if (responce.response){
 
-         dataType: "json",
-         url:  'http://contacts/api/edit',
-         type: 'POST',
-         data: {
-            'id':          $("#idform").val(),
-            'first_Name':  $("#first_name").val(),
-            'last_Name':   $("#last_name").val(),
-            'company':     $("#company").val(),
-            'job':         $("#business").val(),
-            'email':       $("#email").val(),
-            'phone':       $("#phone").val(),
-            'note':        $("#notes").val(),
-         },
-         success: function(res){
-            if (res.response){
-               $('#name' + $("#idform").val()  ).html($("#first_name").val() + ' ' + $("#last_name").val());
-               $('#email' + $("#idform").val() ).html($("#email").val());
-               $('#phone' + $("#idform").val() ).html($("#phone").val());
-            }
-         },
-         error: function(res){
-            console.log(res);
-         },
-      })
-      /* ============ */
-
+         $('#name' + $("#idform").val()  ).html($("#first_name").val() + ' ' + $("#last_name").val());
+         $('#email' + $("#idform").val() ).html($("#email").val());
+         $('#phone' + $("#idform").val() ).html($("#phone").val());
+      }
       contactOverlay.removeClass("show");
       contactComposeSidebar.removeClass("show");
       
    });
 
-   $(".dataTables_scrollBody tr").on("click", function (e) {
+   $(".dataTables_scrollBody tr").on("click", async function (e) {
       updatecontact.removeClass("display-none");
       addcontact.addClass("display-none");
       contactOverlay.addClass("show");
       contactComposeSidebar.addClass("show");
       /* ------- */
       let idSelect = $(e.currentTarget).data('idcontact');
-      
-      $.ajax({
-
-         dataType: "json",
-         url:  'http://contacts/api',
-         type: 'POST',
-         data: {
-            type: 'id',
-            elements: idSelect,
-         },
-         success: function(res){
-            let res_contact = res.contacts[0]
+      let responce = await custAjax('http://contacts/api', {type: 'id', elements: idSelect });
+      if (responce.response){
+         let res_contact = responce.contacts[0]
             /* ------- */
             $("#idform").val(res_contact["id"])
             $("#first_name").val(res_contact["first_Name"]);
@@ -232,12 +212,7 @@ $(document).ready(function () {
             $("#email").val(res_contact["email"]);
             $("#phone").val(res_contact["phone"]);
             $("#notes").val(res_contact["note"]); 0.2
-         },
-         error: function(res){
-            console.log(res);
-         },
-      })
-      
+      }
       labelEditForm.addClass("active");
    }).on("click", ".checkbox-label,.favorite,.delete", function (e) {
       e.stopPropagation();
