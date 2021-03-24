@@ -169,7 +169,7 @@
       </div>
       <div class="divider"></div>
       <!-- form start -->
-      <form class="edit-contact-item mb-5 mt-5">
+      <form class="edit-contact-item mb-5 mt-5 cust-form">
         <div class="row">
           <div class="input-field col s12">
             <i class="material-icons prefix"> perm_identity </i>

@@ -71,3 +71,62 @@ function modelContactHtml(id, first_Name, last_Name, email, phone, favory){
 	</tr>
 	`
 }
+
+/* test */
+$('.btn1').on('click',(e)=>{
+	$('p').addClass('select');
+});
+
+$('.btn2').on('click',(e)=>{
+	$('p').removeClass('select');
+});
+
+/*  action liste */
+let cust_page = 0;
+
+$('.btn3').on('click',async (e)=>{
+	cust_page-- ;
+	if (cust_page < 1){
+		cust_page = 1;
+	}
+
+	let result = await custAjax("http://contacts/api?page=" + cust_page);
+	
+	result.contacts.forEach(element => {
+		
+		$('.ul').append(`<li><button class="btn btn-secondary" style="width: 200px; background: #fff; color: black">`+ element.first_Name +`</button></li>`)
+	});
+	
+});
+
+$('.btn4').on('click',async (e)=>{
+	cust_page++ ;
+	
+	let result = await custAjax("http://contacts/api?page=" + cust_page);
+	
+	result.contacts.forEach(element => {
+		
+		$('.ul').append(`<li><button class="btn btn-secondary" style="width: 200px; background: #fff; color: black">`+ element.first_Name +`</button></li>`)
+	});
+});
+
+//end scroll event
+$(window).scroll( async function(e){
+	if (e.target.scrollingElement.scrollTop + e.target.scrollingElement.offsetHeight == e.target.scrollingElement.scrollHeight){
+		console.log('end scroll');
+	
+		cust_page++ ;
+		
+		let result = await custAjax("http://contacts/api?page=" + cust_page);
+		result.contacts.forEach(element => {
+			
+			$('.ul').append(`<li><button class="btn btn-secondary" style="width: 200px; background: #fff; color: black">`+ element.first_Name +`</button></li>`)
+		});
+	}	
+});
+
+$('.add-contact').on('click', ()=>{
+
+	let param = $('.cust-form').serialize();
+	custAjax('http://contacts/api/create', param);
+})
