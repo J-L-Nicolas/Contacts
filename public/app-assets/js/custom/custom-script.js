@@ -36,6 +36,7 @@ function custAjax(url, data={}){
 // function rafraichire page 
 function reloadContacts(url = 'http://contacts/api'){
 	(async function(){
+		
 		let responce = await custAjax(url);
 		if (responce.response){
 			let newList = '';
@@ -44,8 +45,7 @@ function reloadContacts(url = 'http://contacts/api'){
 				newList += modelContactHtml(element.id, element.first_Name, element.last_Name, element.email, element.phone, element.favory)
 			});
 			$('tbody').html(newList);
-			pagertag();
-			readyDocument()
+			readyDocument();
 		}
 
 	})();
@@ -72,38 +72,54 @@ function modelContactHtml(id, first_Name, last_Name, email, phone, favory){
 
 // pagination --------------
 let cust_pager = 1;
+let cust_pager_Max = -1
+
 $('.cust-btn-pr').on('click',()=>{
+
 	cust_pager--;
 	if (cust_pager < 1){
+
 		cust_pager = 1;
 	}
 	reloadContacts('http://contacts/api?page=' + cust_pager);
+	pagertag(cust_pager);
 });
 
 $('.cust-btn-st').on('click',()=>{
+
 	cust_pager++;
+	if (cust_pager > cust_pager_Max){
+		cust_pager = cust_pager_Max;
+	}
 	reloadContacts('http://contacts/api?page=' + cust_pager);
+	pagertag(cust_pager);
 });
 
-function pagertag(paginate = 10){
-	console.log(cust_page);
+function pagertag(active = null,paginate = 10){
+
 	(async ()=>{
+		
+		let responce = await custAjax("http://contacts/api/count"); 
+		if (responce.response){
 
-		let count = await custAjax("http://contacts/api/count"); 
-		let nbpages = parseInt(parseInt(count.count) / parseInt(paginate)) +1;
-		$('.cust-listpresuiv').html("");
+			let nbpages = Math.ceil(parseInt(responce.count) / parseInt(paginate));
+			cust_pager_Max = nbpages;
+			$('.cust-listpresuiv').html("");
 
-		for (let index = 1; index < nbpages; index++) {
-			$('.cust-listpresuiv').append(`<button class='cust-btn-pr cust-btnPj ct-pager' data-ref="${index}">${index}</button>`);
+			for (let index = 0; index < nbpages; index++) {
+
+				$('.cust-listpresuiv').append(`<button class='cust-btn-pr cust-btnPj ct-pager ${active == (index + 1)? "cust-actif":""}' data-ref="${index + 1}">${index + 1 }</button>`);
+			}
+			
+			// 
+			$('.ct-pager').on('click',(e)=>{
+
+				cust_pager = parseInt(e.target.dataset.ref);
+				reloadContacts('http://contacts/api?page=' + cust_pager)
+				pagertag(cust_pager);
+			});
 		}
 		
-		// 
-		$('.ct-pager').on('click',(e)=>{
-			let mypager = e.target.dataset.ref;
-			cust_page = mypager;
-			reloadContacts('http://contacts/api?page=' + cust_page)
-			console.log(cust_page);
-		});
 	})()
 }
 pagertag();
@@ -153,19 +169,19 @@ $('.btn4').on('click',async (e)=>{
 });
 
 //end scroll event
-$(window).scroll( async function(e){
-	if (e.target.scrollingElement.scrollTop + e.target.scrollingElement.offsetHeight == e.target.scrollingElement.scrollHeight){
-		console.log('end scroll');
+// $(window).scroll( async function(e){
+// 	if (e.target.scrollingElement.scrollTop + e.target.scrollingElement.offsetHeight == e.target.scrollingElement.scrollHeight){
+// 		console.log('end scroll');
 	
-		cust_page++ ;
+// 		cust_page++ ;
 		
-		let result = await custAjax("http://contacts/api?page=" + cust_page);
-		result.contacts.forEach(element => {
+// 		let result = await custAjax("http://contacts/api?page=" + cust_page);
+// 		result.contacts.forEach(element => {
 			
-			$('.ul').append(`<li><button class="btn btn-secondary" style="width: 200px; background: #fff; color: black">`+ element.first_Name +`</button></li>`)
-		});
-	}	
-});
+// 			$('.ul').append(`<li><button class="btn btn-secondary" style="width: 200px; background: #fff; color: black">`+ element.first_Name +`</button></li>`)
+// 		});
+// 	}	
+// });
 
 $('.add-contact').on('click', ()=>{
 

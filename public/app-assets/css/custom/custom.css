@@ -36,3 +36,6 @@ p{
 	border: inset 2px rgb(139, 139, 139);
 	box-shadow: 0px 0px 3px rgb(143, 143, 143);
 }
+.cust-actif{
+	background-color: rgb(0, 119, 255);
+}
