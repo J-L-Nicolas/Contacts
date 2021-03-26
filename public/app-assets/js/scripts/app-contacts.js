@@ -1,5 +1,4 @@
 $(document).ready(function () {
-   "use strict";
    /*
     * DataTables - Tables
     */
@@ -11,7 +10,7 @@ $(document).ready(function () {
       scrollY: calcDataTableHeight(),
       scrollCollapse: true,
       scrollX: false,
-      paging: true,
+      paging: false,
       responsive: true,
       lengthMenu: [15],
       aoColumns: [
@@ -39,6 +38,13 @@ $(document).ready(function () {
          var ps_datatable = new PerfectScrollbar('.dataTables_scrollBody');
       }
    });
+
+   readyDocument();
+})
+
+function readyDocument () {
+   "use strict";
+   
 
    // Custom search
    function filterGlobal() {
@@ -77,7 +83,7 @@ $(document).ready(function () {
 
    // Favorite star click
    $(".favorite i").on("click", async function (e) {
-
+   
       e.preventDefault();
       let id_favori = $(this).data('ref');
       let i_this = $(this);
@@ -238,7 +244,7 @@ $(document).ready(function () {
          }
       });
    }
-});
+};
 
 // Sidenav
 $(".sidenav-trigger").on("click", function () {

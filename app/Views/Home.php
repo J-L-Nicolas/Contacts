@@ -124,6 +124,7 @@
           </thead>
           <tbody>
           <?php if ($listeContact->response){
+            
             foreach($listeContact->contacts as $item){ ?>
               <tr class='cust-contact' data-idContact="<?php echo $item->id ?>" id="barre-<?php echo $item->id ?>">
 
@@ -151,6 +152,9 @@
 
           </tbody>
         </table>
+          <button class='cust-btn-pr cust-btnPj'>Precedent</button>
+          <span class="cust-listpresuiv"></span>
+          <button class='cust-btn-st cust-btnPj'>Suivant</button>
       </div>
     </div>
   </div>

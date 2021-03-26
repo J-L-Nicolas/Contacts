@@ -58,7 +58,7 @@ class Api extends BaseController
                     $listeContact = $this->contactsModel
                         ->like( $this->request->getVar('type'), $this->request->getVar('elements') ,'both',null,true)
                         ->orderBy('id', 'DESC')
-                        ->paginate(12);
+                        ->paginate($paginate);
             }
 
         }else{
@@ -73,6 +73,15 @@ class Api extends BaseController
 
         return $this->response->setJSON($response);
 	}
+
+    public function count(){
+        $response['response'] = false;
+        if ($result = $this->contactsModel->countAllResults()){
+            $response['response'] = true;
+            $response['count'] = $result;
+        }
+        return $this->response->setJSON($response);
+    }
 
 
     /* ************************************

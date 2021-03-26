@@ -21,3 +21,18 @@ p{
 .select{
 	color: red;
 }
+
+#data-table-contact_info{
+	display: none !important;
+}
+.cust-btnPj{
+	border-radius: 7px;
+	border: solid 2px white;
+	background-color: white;
+	padding: 5px 5px;
+	margin: 3px 3px;
+}
+.cust-btnPj:hover{
+	border: inset 2px rgb(139, 139, 139);
+	box-shadow: 0px 0px 3px rgb(143, 143, 143);
+}
