@@ -117,8 +117,18 @@ function readyDocument () {
       let id_delete = $(this).data('ref');
       let message = confirm("Voulez-vous vraiment supprimer ce contact ?");
       if (message){
-         let resultaAjax = await custAjax("http://contacts/api/delete", {id: id_delete});
-         reloadContacts();
+         await custAjax("http://contacts/api/delete", {id: id_delete});
+
+         // verification fin de page
+         let responce = await custAjax("http://contacts/api/count"); 
+         let nbpages = Math.ceil(parseInt(responce.count) / 10);
+			cust_pager_Max = nbpages;
+         if (cust_pager > cust_pager_Max){
+            cust_pager = cust_pager_Max;
+         }
+         //
+
+         reloadContacts('http://contacts/api?page=' + cust_pager);
       }
    })
 

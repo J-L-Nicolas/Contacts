@@ -140,7 +140,7 @@
                   <td id="email<?php echo $item->id ?>"  ><?php echo $item->email ?></td>
                   <td id="phone<?php echo $item->id ?>"  ><?php echo $item->phone ?></td>
                   <td><span class="favorite" ><i data-ref="<?php echo $item->id ?>" class="<?php echo  $item->favory == 'No'? 'material-icons' : 'material-icons amber-text' ?> f" > star_border </i></span></td>
-                  <td><span class="delete" ><i data-ref="<?php echo $item->id ?>" class="material-icons delete">delete_outline</i></span></td>
+                  <td><span class="delete" ><i data-ref="<?php echo $item->id ?>" class="material-icons">delete_outline</i></span></td>
 
                 </tr>
               <?php } 

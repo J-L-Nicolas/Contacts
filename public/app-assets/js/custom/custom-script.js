@@ -33,26 +33,27 @@ function custAjax(url, data={}){
 	})
 }
 
-// function rafraichire page 
+// function rafraichir contacts page 
 function reloadContacts(url = 'http://contacts/api'){
 	(async function(){
 		
 		let responce = await custAjax(url);
 		if (responce.response){
 			let newList = '';
-			$('tbody').html('');
+			$('tbody').html('').show('slow');
 			responce.contacts.forEach(element => {
 				newList += modelContactHtml(element.id, element.first_Name, element.last_Name, element.email, element.phone, element.favory)
 			});
-			$('tbody').html(newList);
+			$('tbody').append(newList).show('slow');
 			readyDocument();
+			pagertag(cust_pager);
 		}
 
 	})();
 	
 }
 
-
+// model html pour un contact
 function modelContactHtml(id, first_Name, last_Name, email, phone, favory){
 	return `<tr class='cust-contact' data-idContact="${id}" id="barre-${id}" role="row">
 				<td class="center-align contact-checkbox sorting_1" tabindex="0">
@@ -66,7 +67,7 @@ function modelContactHtml(id, first_Name, last_Name, email, phone, favory){
 				<td id="email${id}"  >${email}</td>
 				<td id="phone${id}"  >${phone}</td>
 				<td><span class="favorite" ><i data-ref="${id}" class="${ favory == 'No'? 'material-icons' : 'material-icons amber-text' } f" > star_border </i></span></td>
-				<td><span class=" " ><i data-ref="${id}" class="material-icons delete">delete_outline</i></span></td>
+				<td><span class="delete" ><i data-ref="${id}" class="material-icons">delete_outline</i></span></td>
 			</tr>`
 }
 
@@ -74,6 +75,7 @@ function modelContactHtml(id, first_Name, last_Name, email, phone, favory){
 let cust_pager = 1;
 let cust_pager_Max = -1
 
+//button prevent
 $('.cust-btn-pr').on('click',()=>{
 
 	cust_pager--;
@@ -82,9 +84,10 @@ $('.cust-btn-pr').on('click',()=>{
 		cust_pager = 1;
 	}
 	reloadContacts('http://contacts/api?page=' + cust_pager);
-	pagertag(cust_pager);
+	
 });
 
+// button next
 $('.cust-btn-st').on('click',()=>{
 
 	cust_pager++;
@@ -92,9 +95,10 @@ $('.cust-btn-st').on('click',()=>{
 		cust_pager = cust_pager_Max;
 	}
 	reloadContacts('http://contacts/api?page=' + cust_pager);
-	pagertag(cust_pager);
+	
 });
 
+// pagination gestion
 function pagertag(active = null,paginate = 10){
 
 	(async ()=>{
@@ -116,7 +120,7 @@ function pagertag(active = null,paginate = 10){
 
 				cust_pager = parseInt(e.target.dataset.ref);
 				reloadContacts('http://contacts/api?page=' + cust_pager)
-				pagertag(cust_pager);
+				
 			});
 		}
 		
@@ -187,4 +191,5 @@ $('.add-contact').on('click', ()=>{
 
 	let param = $('.cust-form').serialize();
 	custAjax('http://contacts/api/create', param);
+	reloadContacts('http://contacts/api?page=' + cust_pager);
 })
